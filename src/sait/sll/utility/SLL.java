@@ -7,7 +7,7 @@ public class SLL implements LinkedListADT{
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 1L;
+
 	
 	private Node head;
 	
@@ -25,8 +25,6 @@ public class SLL implements LinkedListADT{
 	}
 	@Override
 	public void prepend(Object data) {
-		Node newNode = new Node(data, head);
-		head = newNode;
 	}
 	@Override
 	public void append(Object data) {
@@ -70,24 +68,8 @@ public class SLL implements LinkedListADT{
 			}
 		}
 	}
-	@Override
-	public Object retrieve(int index) throws IndexOutOfBoundsException{
-		if (index < 0 || index > size()) {
-			throw new IndexOutOfBoundsException("Invalid Index while replacing");
-		}else {
-			Node current = head;
-			int count = 0;
-			while(current!=null) {
-				if(count == index) {
-					break;
-				}else {
-					current = current.getNext();
-					count++;
-				}
-			}
-			return current.getData();
-		}
-	}
+	
+	
 	@Override
 	public void insert(Object data, int index) throws IndexOutOfBoundsException {
 		// TODO Auto-generated method stub
@@ -107,6 +89,11 @@ public class SLL implements LinkedListADT{
 	public boolean contains(Object data) {
 		// TODO Auto-generated method stub
 		return false;
+	}
+	@Override
+	public Object retrieve(int index) throws IndexOutOfBoundsException {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }
