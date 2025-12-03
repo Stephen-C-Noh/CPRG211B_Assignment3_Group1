@@ -1,5 +1,7 @@
 package sait.sll.problemdomain;
 
+
+
 import java.io.Serializable;
 
 /**
@@ -10,18 +12,24 @@ import java.io.Serializable;
  */
 public class User implements Serializable {
 
+=======
+
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
 
+
 	private int id;
 	private String name;
 	private String email;
+
+=======
 	/*  Since I do not want the password to survive serialization/ deserialization,
 	 *  I will make String password transient
 	 *  */
 	private transient String password;
+
 
 	/**
 	 * Creates a User object with specified arguments.
