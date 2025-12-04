@@ -1,13 +1,15 @@
 package sait.sll.utility;
 
+import java.io.Serializable;
 
+public class Node implements Serializable{
 
-public class Node {
-
+	
 	/**
 	 * 
 	 */
-
+	private static final long serialVersionUID = 1L;
+	
 	private Object data;
 	private Node next;
 	
@@ -32,5 +34,5 @@ public class Node {
 		this.next = next;
 	}
 	
-	
+
 }
