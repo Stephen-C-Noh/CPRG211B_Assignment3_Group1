@@ -1,6 +1,15 @@
 package sait.sll.utility;
 
-public class Node {
+import java.io.Serializable;
+
+/**
+ * Node class used by the singly linked list (SLL).
+ * Stores a piece of data and a reference to the next node.
+ */
+public class Node implements Serializable {
+
+    private static final long serialVersionUID = 1L;
+
     private Object data;
     private Node next;
 
