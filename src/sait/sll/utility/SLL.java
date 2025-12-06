@@ -2,221 +2,179 @@ package sait.sll.utility;
 
 import java.io.Serializable;
 
-/**
- * Singly linked list implementation of LinkedListADT.
- * Stores values in Node objects linked together.
- * 
- * @version 2025
- */
 public class SLL implements LinkedListADT, Serializable {
-    
-    // Required for Serializable classes.
-    private static final long serialVersionUID = 1L;
 
-    /**
-     * Reference to the first node in the list.
-     * If head is null, the list is empty.
-     */
-    private Node head;
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 
-    /**
-     * Returns true if the list has no nodes.
-     */
-    @Override
-    public boolean isEmpty() {
-        return head == null;
-    }
 
-    /**
-     * Removes all nodes from the list.
-     */
-    @Override
-    public void clear() {
-        head = null;
-    }
+	// Attributes
+	private Node head;
+	private int size;
 
-    /**
-     * Adds a new node to the beginning of the list.
-     * Example: list = [b, c], prepend(a) => [a, b, c]
-     */
-    @Override
-    public void prepend(Object data) {
-        head = new Node(data, head);
-    }
+	// Constructor
+	public SLL() {
+		head = null;
+		size = 0;
+	}
 
-    /**
-     * Adds a new node to the end of the list.
-     * Example: list = [a, b], append(c) => [a, b, c]
-     */
-    @Override
-    public void append(Object data) {
-        Node newNode = new Node(data, null);
+	@Override
+	public boolean isEmpty() {
+		return (size == 0);
+	}
 
-        if (head == null) {
-            head = newNode;
-        } else {
-            Node current = head;
-            while (current.getNext() != null) {
-                current = current.getNext();
-            }
-            current.setNext(newNode);
-        }
-    }
+	@Override
+	public void clear() {
+		head = null;
+		size = 0;
+	}
 
-    /**
-     * Counts how many nodes are in the list.
-     */
-    @Override
-    public int size() {
-        int count = 0;
-        Node current = head;
+	@Override
+	public void append(Object data) {
+		// new node
+		Node newNode = new Node(data, null);
+		if (isEmpty()) {
+			// if the list is empty, newNode is now head.
+			head = newNode;
+		} else {
+			// if the list is NOT empty, go through the list
+			// until current gets to the last node
+			Node current = head;
+			while (current.getNext() != null) {
+				current = current.getNext();
+			}
+			// Then set the newNode as next node.
+			current.setNext(newNode);
+		}
+		size++;
+	}
 
-        while (current != null) {
-            count++;
-            current = current.getNext();
-        }
+	@Override
+	public void prepend(Object data) {
+		// adding a node at the beginning of the singly linked list.
 
-        return count;
-    }
+		// set the next node of newNode as head(first node).
+		Node newNode = new Node(data, head);
+		// then make newNode a head(first node)
+		// the previous first node is now the second.
+		head = newNode;
+		size++;
+	}
 
-    /**
-     * Helper method to check if an index is valid.
-     * 
-     * @param index          index to check
-     * @param allowEqualSize if true, index == size() is allowed (for insert)
-     */
-    private void checkIndex(int index, boolean allowEqualSize) {
-        int sz = size();
+	@Override
+	public void insert(Object data, int index) throws IndexOutOfBoundsException {
+		if (index < 0 || index > size) {
+			throw new IndexOutOfBoundsException("Index is Out of Bound while inserting.");
+		}
 
-        if (index < 0) {
-            throw new IndexOutOfBoundsException("Index cannot be negative: " + index);
-        }
+		if (index == 0) {
+			// if inserting at the beginning of SLL, just prepend!
+			prepend(data);
+		} else {
+			Node newNode = new Node(data, null);
+			Node current = head;
+			// insert(data, 3)
+			// index = 3
+			
+			for (int i = 0; i < index - 1; i++) {
+				// Move the current node to desired index.
+				current = current.getNext();
+			}
 
-        if (!allowEqualSize && index >= sz) {
-            // For methods that require 0 .. size()-1
-            throw new IndexOutOfBoundsException("Index out of range: " + index);
-        }
+			// then set next node for newNode one after current.
+			// then overwrite current node with newNode.
+			// Example: SLL[A, B, C, D] index: 2
+			// SLL[A, B, * C, D] * is the current node
+			
+			newNode.setNext(current.getNext());
+			// Now newNode has C as the next node
+			
+			current.setNext(newNode);
+			// Now *(current) has next node of newNode
+			// Result SLL [A,B,N,C,D]
+			size++;
+		}
+	}
 
-        if (allowEqualSize && index > sz) {
-            // For insert where 0 .. size() is allowed
-            throw new IndexOutOfBoundsException("Index out of range: " + index);
-        }
-    }
+	@Override
+	public void replace(Object data, int index) throws IndexOutOfBoundsException {
+		if (index < 0 || index > size) {
+			throw new IndexOutOfBoundsException("Invalid Index while replacing");
+		}
+		Node current = head;
+		for (int i = 0; i < index; i++) {			
+			current = current.getNext();
+		}
+		current.setData(data);
+	}
 
-    /**
-     * Deletes the node at the given index.
-     * Valid indexes: 0 .. size()-1
-     */
-    @Override
-    public void delete(int index) throws IndexOutOfBoundsException {
-        checkIndex(index, false);
+	@Override
+	public int size() {
+		return size;
+	}
 
-        // Remove first node
-        if (index == 0) {
-            head = head.getNext();
-            return;
-        }
+	@Override
+	public void delete(int index) throws IndexOutOfBoundsException {
+		if (index < 0 || index > size) {
+			throw new IndexOutOfBoundsException("Invalid Index while deleting.");
+		}
 
-        // Find node just before the one we want to remove
-        Node previous = head;
-        for (int i = 0; i < index - 1; i++) {
-            previous = previous.getNext();
-        }
+		if (index == 0) {
+			head = head.getNext();
+		} else {
+			Node current = head;
+			for (int i = 0; i < index-1; i++) {
+				current = current.getNext();
+			}
+			current.setNext(current.getNext().getNext());
+		}
+		size--;
+	}
 
-        Node toRemove = previous.getNext();
-        previous.setNext(toRemove.getNext());
-    }
+	@Override
+	public Object retrieve(int index) throws IndexOutOfBoundsException {
+		if (index < 0 || index > size) {
+			throw new IndexOutOfBoundsException("Invalid Index while retrieving");
+		}
 
-    /**
-     * Inserts a node at the given index.
-     * Valid indexes: 0 .. size()
-     *  - 0 means insert at beginning
-     *  - size() means insert at end
-     */
-    @Override
-    public void insert(Object data, int index) throws IndexOutOfBoundsException {
-        checkIndex(index, true);
+		Node current = head;
+		for (int i = 0; i < index; i++) {
+			current = current.getNext();
+		}
+		return current.getData();
+	}
 
-        // Insert at front
-        if (index == 0) {
-            prepend(data);
-            return;
-        }
+	@Override
+	public int indexOf(Object data) {
+		Node current = head;
+		int index = 0;
+		while (current != null) {
+			if (current.getData().equals(data)) {
+				return index;
+			}
+			current = current.getNext();
+			index++;
+		}
+		return -1;
+		// returning -1 instead of 0(false) because 0 can be index.
+	}
 
-        // Find node just before the insert position
-        Node previous = head;
-        for (int i = 0; i < index - 1; i++) {
-            previous = previous.getNext();
-        }
+	@Override
+	public boolean contains(Object data) {
+		return (indexOf(data) != -1);
+	}
 
-        Node newNode = new Node(data, previous.getNext());
-        previous.setNext(newNode);
-    }
-
-    /**
-     * Replaces the data at the given index with a new value.
-     * Valid indexes: 0 .. size()-1
-     */
-    @Override
-    public void replace(Object data, int index) throws IndexOutOfBoundsException {
-        checkIndex(index, false);
-
-        Node current = head;
-        for (int i = 0; i < index; i++) {
-            current = current.getNext();
-        }
-
-        current.setData(data);
-    }
-
-    /**
-     * Returns the index of the first node whose data equals the given value.
-     * Returns -1 if the value is not found.
-     */
-    @Override
-    public int indexOf(Object data) {
-        int index = 0;
-        Node current = head;
-
-        while (current != null) {
-            Object value = current.getData();
-
-            if (value == null && data == null) {
-                return index;
-            }
-
-            if (value != null && value.equals(data)) {
-                return index;
-            }
-
-            index++;
-            current = current.getNext();
-        }
-
-        return -1;
-    }
-
-    /**
-     * Returns true if the list contains the given value.
-     */
-    @Override
-    public boolean contains(Object data) {
-        return indexOf(data) != -1;
-    }
-
-    /**
-     * Returns the data stored at the given index.
-     * Valid indexes: 0 .. size()-1
-     */
-    @Override
-    public Object retrieve(int index) throws IndexOutOfBoundsException {
-        checkIndex(index, false);
-
-        Node current = head;
-        for (int i = 0; i < index; i++) {
-            current = current.getNext();
-        }
-
-        return current.getData();
-    }
+	/* There is ONE error in test casing.
+	 * For easier tracking, implementing printList method temporarily.
+	 * */
+	public void printList() {
+		Node current = head;
+		while(current != null) {
+			System.out.print(current.getData() + " -> ");
+			current = current.getNext();
+		}
+		System.out.println("null // end of list");
+	}
 }
