@@ -166,15 +166,15 @@ public class SLL implements LinkedListADT, Serializable {
 		return (indexOf(data) != -1);
 	}
 
-	/* There is ONE error in test casing.
-	 * For easier tracking, implementing printList method temporarily.
-	 * */
-	public void printList() {
-		Node current = head;
-		while(current != null) {
-			System.out.print(current.getData() + " -> ");
-			current = current.getNext();
-		}
-		System.out.println("null // end of list");
-	}
+//	/* There is ONE error in test casing.
+//	 * For easier tracking, implementing printList method temporarily.
+//	 * */
+//	public void printList() {
+//		Node current = head;
+//		while(current != null) {
+//			System.out.print(current.getData() + " -> ");
+//			current = current.getNext();
+//		}
+//		System.out.println("null // end of list");
+//	}
 }
